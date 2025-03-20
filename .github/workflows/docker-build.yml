@@ -55,7 +55,7 @@ jobs:
         tags: |
           type=raw,value=${{ matrix.tag }}-staging
           type=raw,enable=${{ github.event_name != 'pull_request' }},value=${{ matrix.tag }}
-          type=ref,enable=${{ github.event_name != 'pull_request' }},event=branch,prefix=${{ matrix.tag }}-
+          type=ref,enable=${{ github.event_name != 'pull_request' }},event=branch,prefix=${{ matrix.tag }}- 
           type=semver,pattern={{version}},prefix=${{ matrix.tag }}-
           type=semver,pattern={{major}}.{{minor}},prefix=${{ matrix.tag }}-
           type=semver,pattern={{major}},prefix=${{ matrix.tag }}-
@@ -70,10 +70,8 @@ jobs:
         file: ./Dockerfile
         platforms: linux/amd64
         push: true
-        # cache-from: type=registry,ref=lcas.lincoln.ac.uk/cache/${{ steps.docker_image_name.outputs.docker_image }}:${{ matrix.tag }}
-        # cache-to: type=registry,ref=lcas.lincoln.ac.uk/cache/${{ steps.docker_image_name.outputs.docker_image }}:${{ matrix.tag }},mode=max
-        cache-from: type=registry,ref=${{ fromJSON(steps.meta.outputs.json).tags[0] }}
-        cache-to: inline
+        cache-from: type=registry,ref=ghcr.io/${{ github.repository }}/cache/${{ steps.docker_image_name.outputs.docker_image }}:${{ matrix.tag }}
+        cache-to: type=registry,ref=ghcr.io/${{ github.repository }}/cache/${{ steps.docker_image_name.outputs.docker_image }}:${{ matrix.tag }},mode=max
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         build-args: |
