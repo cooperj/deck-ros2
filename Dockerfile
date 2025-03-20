@@ -19,19 +19,29 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Create a ros user that we can run inside the container instead of root.
+ARG USERNAME=ros
+ARG USER_UID=100
+ARG USER_GID=$USER_UID
+
+# Create a non-root user
+RUN groupadd --gid $USER_GID $USERNAME \
+  && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
+  # Add sudo support for the non-root user
+  && apt-get update \
+  && apt-get install -y --no-install-recommends sudo \
+  && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME\
+  && chmod 0440 /etc/sudoers.d/$USERNAME \
+  && rm -rf /var/lib/apt/lists/*
+
+  
 # The vendor_base stage sets up the base image and includes additional Dockerfiles
 # for various dependencies that are not ROS packages. 
 # This stage is used to build a foundation with all
 # necessary libraries and tools required.
-#
-# - FROM base AS vendor_base: Uses the 'base' image as the starting point and names this stage 'vendor_base'.
-# - INCLUDE .docker/ydlidar.dockerfile: Adds the YDLidar library setup from the specified Dockerfile.
-# - INCLUDE .docker/glog.dockerfile: Adds the Google Logging library setup from the specified Dockerfile.
-# - INCLUDE .docker/magic_enum.dockerfile: Adds the Magic Enum library setup from the specified Dockerfile.
-# - INCLUDE .docker/uvc.dockerfile: Adds the UVC library setup from the specified Dockerfile.
 FROM base AS vendor_base
 
-# setup glog (google log)
+# setup glog (google log): Adds the Google Logging library setup from the specified Dockerfile.
 RUN mkdir -p /tmp/vendor && cd /tmp/vendor && wget -c https://github.com/google/glog/archive/refs/tags/v0.6.0.tar.gz  -O glog-0.6.0.tar.gz &&\
     tar -xzvf glog-0.6.0.tar.gz &&\
     cd glog-0.6.0 &&\
@@ -41,7 +51,7 @@ RUN mkdir -p /tmp/vendor && cd /tmp/vendor && wget -c https://github.com/google/
     sudo ldconfig &&\
     cd ../.. && rm -r glog-*
 
-# setup magic_enum
+# setup magic_enum: Adds the Magic Enum library setup from the specified Dockerfile.
 RUN mkdir -p /tmp/vendor && cd /tmp/vendor && wget -c https://github.com/Neargye/magic_enum/archive/refs/tags/v0.8.0.tar.gz -O  magic_enum-0.8.0.tar.gz &&\
     tar -xzvf magic_enum-0.8.0.tar.gz &&\
     cd magic_enum-0.8.0 &&\
@@ -50,6 +60,16 @@ RUN mkdir -p /tmp/vendor && cd /tmp/vendor && wget -c https://github.com/Neargye
     sudo make install &&\
     sudo ldconfig &&\
     cd ../.. && rm -r magic_enum*   
+
+# Setup Zenoh bridge
+ENV ZENOH_BRIDGE_VERSION=1.2.1
+RUN cd /tmp; \
+    curl -L -O https://github.com/eclipse-zenoh/zenoh-plugin-ros2dds/releases/download/${ZENOH_BRIDGE_VERSION}/zenoh-plugin-ros2dds-${ZENOH_BRIDGE_VERSION}-x86_64-unknown-linux-gnu-standalone.zip; \
+    unzip zenoh-plugin-ros2dds-*.zip && \
+    mv zenoh-bridge-ros2dds /usr/local/bin/ && \
+    chmod +x /usr/local/bin/zenoh-bridge-ros2dds && \
+    ldconfig && \
+    rm -rf zenoh-*
 
 # This stage is named 'sourcefilter' and is based on the 'base' image.
 # It performs the following actions:
@@ -115,8 +135,8 @@ RUN cd /opt/ros/lcas && colcon build && \
 
 USER ros
 
-# Add a custom prompt
-RUN echo "export PS1='\[\e[0;33m\]ros2 ➜ \[\e[0;32m\]\u@\h\[\e[0;34m\]:\w\[\e[0;37m\]\$ '" >> /home/ros/.bashrc
+# Add a custom prompt and tmux configuration
+RUN echo "export PS1='\[\e[0;33m\]deck-ros2 ➜ \[\e[0;32m\]\u@\h\[\e[0;34m\]:\w\[\e[0;37m\]\$ '" >> /home/ros/.bashrc
 COPY ./.docker/tmux.conf /home/ros/.tmux.conf
 
 WORKDIR /home/ros
