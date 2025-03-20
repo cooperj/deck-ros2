@@ -109,12 +109,15 @@ RUN . /opt/ros/lcas/install/setup.sh && \
     rosdep --rosdistro=${ROS_DISTRO} update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-
-# rosdep install --from-paths /opt/ros/lcas/src/local-code/src --ignore-src -y && \
     
 RUN cd /opt/ros/lcas && colcon build && \
     rm -rf /opt/ros/lcas/src/ /opt/ros/lcas/build/ /opt/ros/lcas/log/
 
 USER ros
+
+# Add a custom prompt
+RUN echo "export PS1='\[\e[0;33m\]ros2 ➜ \[\e[0;32m\]\u@\h\[\e[0;34m\]:\w\[\e[0;37m\]\$ '" >> /home/ros/.bashrc
+COPY .docker/tmux.conf /home/ros/.tmux.conf
+
 WORKDIR /home/ros
 ENV SHELL=/bin/bash

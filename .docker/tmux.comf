@@ -1,0 +1,39 @@
+# Enable mouse mode
+set -g mouse on
+
+# Start counting pane and window number at 1
+set -g base-index 1
+setw -g pane-base-index 1
+
+# rename window to reflect current program
+setw -g automatic-rename on
+
+# renumber windows when a window is closed
+set -g renumber-windows on
+
+# expect UTF-8 (tmux < 2.2)
+set -q -g status-utf8 on
+setw -q -g utf8 on
+
+# Set status bar update interval
+set -g status-interval 1
+
+# Status bar style
+set -g status on
+set -g status-bg black
+set -g status-fg white
+set -g status-left-length 100
+set -g status-right-length 150
+
+# Left side: Windows
+set -g status-left "#[default]"
+# Right side: Uptime, Git Status, Date, Time, Hostname
+set -g status-right "#[fg=white] %d %b %Y %H:%M:%S #[fg=black] #[bg=#ff0077] #(hostname -s | tr '[:upper:]' '[:lower:]') "
+
+# Window list styling
+setw -g window-status-format " #[fg=white]#I:#W "
+setw -g window-status-current-format " #[fg=black,bg=cyan]#I:#W #[default]"
+
+# Fix for older versions: Use window-status-style
+setw -g window-status-style "fg=white"
+setw -g window-status-current-style "fg=black,bg=cyan,bold"

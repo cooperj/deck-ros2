@@ -55,3 +55,4 @@ sudo
 swig
 udev
 wget
+tmux
