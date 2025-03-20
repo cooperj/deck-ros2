@@ -42,4 +42,5 @@ grep -qxF "$IP" "$IP_FILE" || echo "$IP" >> "$IP_FILE"
 echo "Connecting to $IP"
 
 echo "Launching Deck ROS2 container"
-podman run -it -u 0 --rm --name deck-ros2 -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix ghcr.io/cooperj/deck-ros2:latest "echo $IP"
+echo "IP: $IP"
+podman run -it -u 0 --rm --name deck-ros2 -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix ghcr.io/cooperj/deck-ros2:humble bash
