@@ -135,8 +135,8 @@ RUN cd /opt/ros/lcas && colcon build && \
 USER ros
 
 # Add a custom prompt and tmux configuration
-RUN echo "export PS1='\[\e[0;33m\]deck-ros2 ➜ \[\e[0;32m\]\u@\h\[\e[0;34m\]:\w\[\e[0;37m\]\$ '" >> /home/ros/.bashrc
-COPY ./.docker/tmux.conf /home/ros/.tmux.conf
+# RUN echo "export PS1='\[\e[0;33m\]deck-ros2 ➜ \[\e[0;32m\]\u@\h\[\e[0;34m\]:\w\[\e[0;37m\]\$ '" >> /home/ros/.bashrc
+# COPY ./.docker/tmux.conf /home/ros/.tmux.conf
 
 WORKDIR /home/ros
 ENV SHELL=/bin/bash
