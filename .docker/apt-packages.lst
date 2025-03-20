@@ -54,3 +54,4 @@ software-properties-common
 sudo
 swig
 udev
+wget

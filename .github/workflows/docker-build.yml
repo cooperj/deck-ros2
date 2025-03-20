@@ -66,8 +66,10 @@ jobs:
         file: ./Dockerfile
         platforms: linux/amd64
         push: true
-        cache-from: type=registry,ref=lcas.lincoln.ac.uk/cache/${{ steps.docker_image_name.outputs.docker_image }}:${{ matrix.tag }}
-        cache-to: type=registry,ref=lcas.lincoln.ac.uk/cache/${{ steps.docker_image_name.outputs.docker_image }}:${{ matrix.tag }},mode=max
+        # cache-from: type=registry,ref=lcas.lincoln.ac.uk/cache/${{ steps.docker_image_name.outputs.docker_image }}:${{ matrix.tag }}
+        # cache-to: type=registry,ref=lcas.lincoln.ac.uk/cache/${{ steps.docker_image_name.outputs.docker_image }}:${{ matrix.tag }},mode=max
+        cache-from: type=registry,ref=${{ fromJSON(steps.meta.outputs.json).tags[0] }}
+        cache-to: inline
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         build-args: |

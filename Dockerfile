@@ -31,15 +31,15 @@ RUN apt-get update && \
 # - INCLUDE .docker/uvc.dockerfile: Adds the UVC library setup from the specified Dockerfile.
 FROM base AS vendor_base
 
-# # setup glog (google log)
-# RUN mkdir -p /tmp/vendor && cd /tmp/vendor && wget -c https://github.com/google/glog/archive/refs/tags/v0.6.0.tar.gz  -O glog-0.6.0.tar.gz &&\
-#     tar -xzvf glog-0.6.0.tar.gz &&\
-#     cd glog-0.6.0 &&\
-#     mkdir build && cd build &&\
-#     cmake .. && make -j4 &&\
-#     sudo make install &&\
-#     sudo ldconfig &&\
-#     cd ../.. && rm -r glog-*
+# setup glog (google log)
+RUN mkdir -p /tmp/vendor && cd /tmp/vendor && wget -c https://github.com/google/glog/archive/refs/tags/v0.6.0.tar.gz  -O glog-0.6.0.tar.gz &&\
+    tar -xzvf glog-0.6.0.tar.gz &&\
+    cd glog-0.6.0 &&\
+    mkdir build && cd build &&\
+    cmake .. && make -j4 &&\
+    sudo make install &&\
+    sudo ldconfig &&\
+    cd ../.. && rm -r glog-*
 
 # setup magic_enum
 RUN mkdir -p /tmp/vendor && cd /tmp/vendor && wget -c https://github.com/Neargye/magic_enum/archive/refs/tags/v0.8.0.tar.gz -O  magic_enum-0.8.0.tar.gz &&\
