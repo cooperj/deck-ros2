@@ -44,4 +44,4 @@ echo "Connecting to $IP"
 echo "Launching Deck ROS2 container"
 echo "IP: $IP"
 
-podman run -it -u 0 --rm --name deck-ros2 -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/deck-ros2/rviz:/home/ros/rviz ghcr.io/cooperj/deck-ros2:humble bash
+podman run -it -u 0 --rm --name deck-ros2 --pull=always -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/deck-ros2/rviz:/home/ros/rviz ghcr.io/cooperj/deck-ros2:humble bash
