@@ -47,3 +47,6 @@ for file in ${CONFIGS_DIR}/*.desktop.in; do
     export LAUNCH_SCRIPT=${CONFIGS_DIR}/connect-robot.sh
     envsubst < ${file} > ${dest_file}
 done
+
+echo "enable x11 access from podman container"
+xhost +local:docker
