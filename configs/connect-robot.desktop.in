@@ -1,0 +1,7 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Connect to Robot
+Exec=bash ${CONFIGS_DIR}/connect-robot.sh
+Terminal=true
+Categories=Utility;
