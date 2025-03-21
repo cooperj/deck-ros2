@@ -25,14 +25,14 @@ ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
 # Create a non-root user
-RUN groupadd --gid $USER_GID $USERNAME
-RUN useradd -m -d /home/$USERNAME -s /bin/bash --uid $USER_UID --gid $USER_GID $USERNAME
+RUN groupadd --gid $USER_GID $USERNAME &&\
+    useradd -m -d /home/$USERNAME -s /bin/bash --uid $USER_UID --gid $USER_GID $USERNAME  &&\
 # own the home directory, configure perms
-RUN chown -R $USERNAME:$USERNAME /home/$USERNAME
-RUN chmod 700 /home/$USERNAME
+RUN chown -R $USERNAME:$USERNAME /home/$USERNAME  &&\
+    chmod 700 /home/$USERNAME
 # Add sudo support for the non-root user
-RUN echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME
-RUN chmod 0440 /etc/sudoers.d/$USERNAME 
+RUN echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME  &&\
+    chmod 0440 /etc/sudoers.d/$USERNAME 
   
 # The vendor_base stage sets up the base image and includes additional Dockerfiles
 # for various dependencies that are not ROS packages. 
@@ -135,8 +135,8 @@ RUN cd /opt/ros/lcas && colcon build && \
 USER ros
 
 # Add a custom prompt and tmux configuration
-# RUN echo "export PS1='\[\e[0;33m\]deck-ros2 ➜ \[\e[0;32m\]\u@\h\[\e[0;34m\]:\w\[\e[0;37m\]\$ '" >> /home/ros/.bashrc
-# COPY ./.docker/tmux.conf /home/ros/.tmux.conf
+RUN echo "export PS1='\[\e[0;33m\]deck-ros2 ➜ \[\e[0;32m\]\u@\h\[\e[0;34m\]:\w\[\e[0;37m\]\$ '" >> /home/ros/.bashrc
+COPY ./.docker/tmux.conf /home/ros/.tmux.conf
 
 WORKDIR /home/ros
 ENV SHELL=/bin/bash
