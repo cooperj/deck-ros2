@@ -1,8 +1,8 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Simulate Robot
-Exec=bash ${DECK_ROS2_DIR}/connect-sim.sh
+Name=Simulate a Turtlebot4
+Exec=bash ${SIM_SCRIPT}
 Icon=${ICON_PATH}/robot.png
 Terminal=true
 Categories=Utility;

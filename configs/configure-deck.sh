@@ -45,6 +45,7 @@ for file in ${CONFIGS_DIR}/*.desktop.in; do
     echo "Configuring ${dest_file} from ${file}"
     export ICON_PATH=${CONFIGS_DIR}/icons
     export LAUNCH_SCRIPT=${DECK_ROS2_DIR}/connect-robot.sh
+    export SIM_SCRIPT=${DECK_ROS2_DIR}/connect-sim.sh
     envsubst < ${file} > ${dest_file}
 done
 

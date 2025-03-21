@@ -24,6 +24,7 @@ libx11-6
 libxext6
 libyaml-cpp-dev
 llvm-dev libclang-dev
+mesa-utils
 nano
 neovim
 net-tools
