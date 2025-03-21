@@ -126,8 +126,20 @@ RUN . /opt/ros/humble/setup.sh && \
 RUN cd /opt/ros/lcas; colcon build && \
     rm -rf /opt/ros/lcas/src/ /opt/ros/lcas/build/ /opt/ros/lcas/log/
 
+## Setup Turtlebot3 sim
+RUN mkdir -p /opt/ros/turtlebot3/src
+WORKDIR /opt/ros/turtlebot3/src
+
+RUN git clone --depth 1 -b humble https://github.com/ROBOTIS-GIT/DynamixelSDK.git
+RUN git clone --depth 1 -b humble https://github.com/ROBOTIS-GIT/turtlebot3_msgs.git
+RUN git clone --depth 1 -b humble https://github.com/ROBOTIS-GIT/turtlebot3.git
+RUN git clone --depth 1 -b humble https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git
+
 # now also copy in all sources and build and install them
 FROM depbuilder AS compiled
+
+RUN cd /opt/ros/turtlebot3; colcon build && \
+    rm -rf /opt/ros/turtlebot3/src/ /opt/ros/turtlebot3/build/ /opt/ros/turtlebot3/log/
 
 RUN . /opt/ros/lcas/install/setup.sh && \
     apt update && \
@@ -153,6 +165,8 @@ COPY ./.docker/tmux.conf /home/ros/.tmux.conf
 RUN echo "alias cls=clear" >> ~/.bashrc
 RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 RUN echo "source /opt/ros/lcas/install/setup.bash" >> ~/.bashrc
+RUN echo "source /opt/ros/turtlebot3/install/setup.bash" >> ~/.bashrc
+RUN echo "export TURTLEBOT3_MODEL=waffle_pi" >> ~/.bashrc
 
 WORKDIR /home/ros/ws
 ENV SHELL=/bin/bash
