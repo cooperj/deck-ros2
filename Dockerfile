@@ -139,7 +139,7 @@ RUN git clone --depth 1 -b humble https://github.com/ROBOTIS-GIT/turtlebot3_simu
 FROM depbuilder AS compiled
 
 RUN export CMAKE_PREFIX_PATH=/opt/ros/humble:$CMAKE_PREFIX_PATH && \
-    source /opt/ros/humble/setup.bash && \
+    . /opt/ros/humble/setup.bash && \
     cd /opt/ros/turtlebot3 && \
     colcon build && \
     rm -rf /opt/ros/turtlebot3/src/ /opt/ros/turtlebot3/build/ /opt/ros/turtlebot3/log/
