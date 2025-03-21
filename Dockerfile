@@ -25,14 +25,14 @@ ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
 # Create a non-root user
-# RUN groupadd --gid $USER_GID $USERNAME \
-#   && useradd -m -d /home/$USERNAME -s /bin/bash --uid $USER_UID --gid $USER_GID -U $USERNAME \
-#   # own the home directory, configure perms
-#   chown -R $USERNAME:$USERNAME /home/$USERNAME \
-#   chmod 700 /home/$USERNAME \
-#   # Add sudo support for the non-root user
-#   && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME\
-#   && chmod 0440 /etc/sudoers.d/$USERNAME 
+RUN groupadd --gid $USER_GID $USERNAME
+RUN useradd -m -d /home/$USERNAME -s /bin/bash --uid $USER_UID --gid $USER_GID -U $USERNAME
+# own the home directory, configure perms
+RUN chown -R $USERNAME:$USERNAME /home/$USERNAME
+RUN chmod 700 /home/$USERNAME
+# Add sudo support for the non-root user
+RUN echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME
+RUN chmod 0440 /etc/sudoers.d/$USERNAME 
   
 # The vendor_base stage sets up the base image and includes additional Dockerfiles
 # for various dependencies that are not ROS packages. 
