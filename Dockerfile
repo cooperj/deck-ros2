@@ -138,7 +138,7 @@ RUN git clone --depth 1 -b humble https://github.com/ROBOTIS-GIT/turtlebot3_simu
 # now also copy in all sources and build and install them
 FROM depbuilder AS compiled
 
-RUN cd /opt/ros/turtlebot3; colcon build && \
+RUN cd /opt/ros/turtlebot3 && colcon build && \
     rm -rf /opt/ros/turtlebot3/src/ /opt/ros/turtlebot3/build/ /opt/ros/turtlebot3/log/
 
 RUN . /opt/ros/lcas/install/setup.sh && \
