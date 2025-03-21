@@ -45,4 +45,4 @@ echo "Launching Deck ROS2 container"
 echo "IP: $IP"
 
 COMMAND="bash"
-podman run -it -u 0 --rm --name deck-ros2 --hostname "$(hostname)" --pull=always -e DISPLAY=$DISPLAY -e ROBOT_IP=$IP --user ros -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/deck-ros2/rviz:/home/ros/rviz --device=/dev/input --device=/dev/uinput --cap-add=SYS_ADMIN ghcr.io/cooperj/deck-ros2:humble $COMMAND
+podman run -it -u 0 --rm --name deck-ros2 --hostname "$(hostname)" --pull=always -e DISPLAY=$DISPLAY -e ROBOT_IP=$IP --user ros -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/deck-ros2/:/home/ros/ws --device=/dev/input --device=/dev/uinput --cap-add=SYS_ADMIN ghcr.io/cooperj/deck-ros2:humble $COMMAND
