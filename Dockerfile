@@ -33,7 +33,15 @@ RUN chown -R $USERNAME:$USERNAME /home/$USERNAME  &&\
 # Add sudo support for the non-root user
 RUN echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME  &&\
     chmod 0440 /etc/sudoers.d/$USERNAME 
-  
+
+# Add user groups
+RUN usermod -a -G dialout $USERNAME &&\
+    usermod -a -G video $USERNAME &&\
+    usermod -a -G audio $USERNAME &&\
+    usermod -a -G plugdev $USERNAME &&\
+    usermod -a -G staff $USERNAME &&\
+    usermod -a -G sudo $USERNAME
+
 # The vendor_base stage sets up the base image and includes additional Dockerfiles
 # for various dependencies that are not ROS packages. 
 # This stage is used to build a foundation with all
@@ -134,9 +142,15 @@ RUN cd /opt/ros/lcas && colcon build && \
 
 USER ros
 
-# Add a custom prompt and tmux configuration
+# Add a custom prompt, tmux configuration and source ros install
 RUN echo "export PS1='\[\e[0;33m\]deck-ros2 ➜ \[\e[0;32m\]\u@\h\[\e[0;34m\]:\w\[\e[0;37m\]\$ '" >> /home/ros/.bashrc
 COPY ./.docker/tmux.conf /home/ros/.tmux.conf
+RUN echo "source /opt/ros/humble/setup.bash" >> /home/ros/.bashrc
+RUN echo "source /opt/ros/lcas/install/setup.bash" >> /home/ros/.bashrc
+
+# setup tmule 
+RUN pip3 install tmule
+ENV PATH="/home/${USERNAME}/.local/bin:${PATH}"
 
 WORKDIR /home/ros
 ENV SHELL=/bin/bash

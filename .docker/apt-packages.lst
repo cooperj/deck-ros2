@@ -57,4 +57,7 @@ udev
 wget
 tmux
 passwd
-unzip   
+unzip
+nano
+neovim
+net-tools
