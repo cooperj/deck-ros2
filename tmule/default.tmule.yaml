@@ -8,10 +8,9 @@ windows:
 
 - name: rviz
   panes:
-  - rviz2
+  - rviz2 --stylesheet $HOME/ws/configs/rviz-dark.qss
 
 - name: teleop
   panes:
   - ros2 run joy joy_node
   - ros2 run teleop_twist_joy teleop_node
-
