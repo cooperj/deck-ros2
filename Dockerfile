@@ -26,7 +26,7 @@ ARG USER_GID=$USER_UID
 
 # Create a non-root user
 RUN groupadd --gid $USER_GID $USERNAME &&\
-    useradd -m -d /home/$USERNAME -s /bin/bash --uid $USER_UID --gid $USER_GID $USERNAME  &&\
+    useradd -m -d /home/$USERNAME -s /bin/bash --uid $USER_UID --gid $USER_GID $USERNAME
 # own the home directory, configure perms
 RUN chown -R $USERNAME:$USERNAME /home/$USERNAME  &&\
     chmod 700 /home/$USERNAME
