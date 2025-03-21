@@ -150,7 +150,7 @@ RUN echo "source /opt/ros/lcas/install/setup.bash" >> /home/ros/.bashrc
 
 # setup tmule 
 RUN pip3 install tmule
-ENV PATH="/home/${USERNAME}/.local/bin:${PATH}"
+RUN echo "PATH=/home/${USERNAME}/.local/bin:${PATH}" >> /home/ros/.bashrc
 
 WORKDIR /home/ros
 ENV SHELL=/bin/bash

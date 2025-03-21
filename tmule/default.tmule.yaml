@@ -1,0 +1,8 @@
+---
+session: deck-ros2
+windows:
+
+- name: robot_connection
+  panes:
+  - echo "ROS2 Robot Connection"
+  - echo $ROBOT_IP
