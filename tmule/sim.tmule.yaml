@@ -4,8 +4,7 @@ windows:
 
 - name: gazebo
   panes:
-  - ros2 launch turtlebot3_gazebo turtlebot3_house.launch.py
-  - ros2 launch turtlebot3_bringup rviz2.launch.py
+  - ros2 launch turtlebot4_ignition_bringup turtlebot4_ignition.launch.py slam:=true nav2:=true rviz:=true
 
 - name: teleop
   panes:
