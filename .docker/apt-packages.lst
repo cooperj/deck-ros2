@@ -1,12 +1,15 @@
+
 apt-transport-https
 build-essential
 ca-certificates
 cmake
+cowsay
 curl  
 g++ 
 git
 ignition-fortress
 libasio-dev
+libclang-dev
 libegl1
 libgflags-dev
 libgl1-mesa-dev
@@ -23,7 +26,7 @@ libusb-1.0*
 libx11-6
 libxext6
 libyaml-cpp-dev
-llvm-dev libclang-dev
+llvm-dev 
 mesa-utils
 nano
 neovim

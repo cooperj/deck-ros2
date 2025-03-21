@@ -168,6 +168,7 @@ RUN echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
 # sort out dotfiles
 COPY ./.docker/tmux.conf /home/ros/.tmux.conf
 RUN echo "alias cls=clear" >> ~/.bashrc
+RUN echo "alias spheres=/opt/VirtualGL/bin/glxspheres64" >> ~/.bashrc
 RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 RUN echo "source /opt/ros/lcas/install/setup.bash" >> ~/.bashrc
 
