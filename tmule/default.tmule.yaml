@@ -1,8 +1,8 @@
 ---
-session: deck-ros2
+session: deck-controller
 windows:
 
 - name: robot_connection
   panes:
-  - echo "ROS2 Robot Connection"
+  - echo "Connected to ROS2 Robot..."
   - echo $ROBOT_IP

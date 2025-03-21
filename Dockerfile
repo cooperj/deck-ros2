@@ -129,8 +129,6 @@ RUN cd /opt/ros/lcas; colcon build && \
 # now also copy in all sources and build and install them
 FROM depbuilder AS compiled
 
-RUN echo "source /opt/ros/lcas/install/setup.bash" >> /etc/bash.bashrc
-
 RUN . /opt/ros/lcas/install/setup.sh && \
     apt update && \
     rosdep --rosdistro=${ROS_DISTRO} update && \
@@ -140,17 +138,22 @@ RUN . /opt/ros/lcas/install/setup.sh && \
 RUN cd /opt/ros/lcas && colcon build && \
     rm -rf /opt/ros/lcas/src/ /opt/ros/lcas/build/ /opt/ros/lcas/log/
 
+# Switch to the ros user and then configure the environment
 USER ros
 
 # Add a custom prompt, tmux configuration and source ros install
-RUN echo "export PS1='\[\e[0;33m\]deck-ros2 ➜ \[\e[0;32m\]\u@\h\[\e[0;34m\]:\w\[\e[0;37m\]\$ '" >> /home/ros/.bashrc
-COPY ./.docker/tmux.conf /home/ros/.tmux.conf
-RUN echo "source /opt/ros/humble/setup.bash" >> /home/ros/.bashrc
-RUN echo "source /opt/ros/lcas/install/setup.bash" >> /home/ros/.bashrc
+RUN echo "export PS1='\[\e[0;33m\]deck-ros2 ➜ \[\e[0;32m\]\u@\h\[\e[0;34m\]:\w\[\e[0;37m\]\$ '" >> ~/.bashrc
 
 # setup tmule 
 RUN pip3 install tmule
-RUN echo "PATH=/home/${USERNAME}/.local/bin:${PATH}" >> /home/ros/.bashrc
+RUN echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
 
-WORKDIR /home/ros
+# sort out dotfiles
+COPY ./.docker/tmux.conf /home/ros/.tmux.conf
+RUN echo "alias cls=clear" >> ~/.bashrc
+RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+RUN echo "source /opt/ros/lcas/install/setup.bash" >> ~/.bashrc
+RUN echo "echo 'ROBOT_IP: ' ${ROBOT_IP}" >> ~/.bashrc
+
+WORKDIR /home/ros/ws
 ENV SHELL=/bin/bash

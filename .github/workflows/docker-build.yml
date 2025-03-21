@@ -8,12 +8,6 @@ on:
   pull_request:
     branches: [ main ]
   workflow_dispatch:
-    inputs:
-      purge_cache:
-        description: 'Purge build cache'
-        required: false
-        default: false
-        type: boolean
 
 jobs:
   build:
@@ -76,7 +70,7 @@ jobs:
         file: ./Dockerfile
         platforms: linux/amd64
         push: true
-        cache-from: ${{ inputs.purge_cache == 'true' && 'type=local,src=/dev/null' || 'type=registry,ref=ghcr.io/${{ github.repository }}/cache/${{ steps.docker_image_name.outputs.docker_image }}:${{ matrix.tag }}' }}
+        cache-from: type=registry,ref=ghcr.io/${{ github.repository }}/cache/${{ steps.docker_image_name.outputs.docker_image }}:${{ matrix.tag }}
         cache-to: type=registry,ref=ghcr.io/${{ github.repository }}/cache/${{ steps.docker_image_name.outputs.docker_image }}:${{ matrix.tag }},mode=max
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
