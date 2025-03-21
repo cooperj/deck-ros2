@@ -5,9 +5,14 @@ ca-certificates
 cmake
 cowsay
 curl  
+evemu-tools
+evtest
 g++ 
 git
 ignition-fortress
+input-utils
+joystick
+jstest-gtk
 libasio-dev
 libclang-dev
 libegl1
