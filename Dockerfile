@@ -153,7 +153,6 @@ COPY ./.docker/tmux.conf /home/ros/.tmux.conf
 RUN echo "alias cls=clear" >> ~/.bashrc
 RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 RUN echo "source /opt/ros/lcas/install/setup.bash" >> ~/.bashrc
-RUN echo "echo 'ROBOT_IP: ' ${ROBOT_IP}" >> ~/.bashrc
 
 WORKDIR /home/ros/ws
 ENV SHELL=/bin/bash

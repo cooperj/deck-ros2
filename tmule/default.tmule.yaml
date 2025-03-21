@@ -2,7 +2,16 @@
 session: deck-controller
 windows:
 
-- name: robot_connection
+- name: zenoh
   panes:
-  - echo "Connected to ROS2 Robot..."
-  - echo $ROBOT_IP
+  - zenoh-bridge-ros2dds -e tcp/$ROBOT_IP:7447
+
+- name: rviz
+  panes:
+  - rviz2
+
+- name: teleop
+  panes:
+  - ros2 run joy joy_node
+  - ros2 run teleop_twist_joy teleop_node
+

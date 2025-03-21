@@ -44,5 +44,5 @@ echo "Connecting to $IP"
 echo "Launching Deck ROS2 container"
 echo "IP: $IP"
 
-COMMAND="bash"
+COMMAND="tmule --config ~/ws/tmule/default.tmule.yaml launch"
 podman run -it -u 0 --rm --name deck-ros2 --hostname "$(hostnamectl hostname)" --pull=always -e DISPLAY=$DISPLAY -e ROBOT_IP=$IP --user ros -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/deck-ros2/:/home/ros/ws --device=/dev/input --device=/dev/uinput --cap-add=SYS_ADMIN ghcr.io/cooperj/deck-ros2:humble $COMMAND
