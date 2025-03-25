@@ -41,6 +41,9 @@ grep -qxF "$IP" "$IP_FILE" || echo "$IP" >> "$IP_FILE"
 # -- Connect to robot and launch teleop and RViz --
 echo "Connecting to $IP"
 
+echo "Enabling x11 access from podman container"
+xhost +local:docker
+
 echo "Launching Deck ROS2 container"
 echo "IP: $IP"
 
