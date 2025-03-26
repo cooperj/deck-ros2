@@ -8,5 +8,4 @@ windows:
 
 - name: teleop
   panes:
-  - ros2 run joy joy_node
-  - ros2 run teleop_twist_joy teleop_node
+  - ros2 launch deck_controller joystick.launch.py

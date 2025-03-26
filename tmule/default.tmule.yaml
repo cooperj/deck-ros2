@@ -13,4 +13,4 @@ windows:
 
 - name: teleop
   panes:
-  - ros2 launch deck_controller teleop.launch.py
+  - ros2 launch deck_controller joystick.launch.py
