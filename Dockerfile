@@ -164,6 +164,7 @@ RUN echo "export PS1='\[\e[0;33m\]deck-ros2 ➜ \[\e[0;32m\]\u@\h\[\e[0;34m\]:\w
 # setup tmule 
 RUN pip3 install tmule
 RUN echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+RUN echo 'export PATH="/usr/games:$PATH"' >> ~/.bashrc
 
 # sort out dotfiles
 COPY ./.docker/tmux.conf /home/ros/.tmux.conf
