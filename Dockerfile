@@ -139,10 +139,6 @@ RUN . /opt/ros/humble/setup.sh && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# build the workspace but only until limo_gazebosim to avoid building the hardware specific packages
-RUN cd /opt/ros/lcas; colcon build && \
-    rm -rf /opt/ros/lcas/src/ /opt/ros/lcas/build/ /opt/ros/lcas/log/
-
 # now also copy in all sources and build and install them
 FROM depbuilder AS compiled
 
@@ -154,6 +150,13 @@ RUN . /opt/ros/lcas/install/setup.sh && \
     
 RUN cd /opt/ros/lcas && colcon build && \
     rm -rf /opt/ros/lcas/src/ /opt/ros/lcas/build/ /opt/ros/lcas/log/
+
+# install src dependencies under coops folder
+RUN mkdir -p /opt/ros/coops
+COPY ./src /opt/ros/coops/src
+RUN cd /opt/ros/coops; colcon build && \
+    rm -rf /opt/ros/coops/src/ /opt/ros/coops/build/ /opt/ros/coops/log/
+
 
 # Switch to the ros user and then configure the environment
 USER ros
@@ -172,6 +175,7 @@ RUN echo "alias cls=clear" >> ~/.bashrc
 RUN echo "alias spheres=/opt/VirtualGL/bin/glxspheres64" >> ~/.bashrc
 RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 RUN echo "source /opt/ros/lcas/install/setup.bash" >> ~/.bashrc
+RUN echo "source /opt/ros/coops/install/setup.bash" >> ~/.bashrc
 
 WORKDIR /home/ros/ws
 ENV SHELL=/bin/bash
