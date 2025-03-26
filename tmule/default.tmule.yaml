@@ -4,7 +4,7 @@ windows:
 
 - name: zenoh
   panes:
-  - cowsay -f tux Connected to: $ROBOT_IP
+  - cowsay -f tux Connected to $ROBOT_IP
   - zenoh-bridge-ros2dds -e tcp/$ROBOT_IP:7447
 
 - name: rviz
