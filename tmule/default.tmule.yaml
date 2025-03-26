@@ -2,15 +2,14 @@
 session: deck-controller
 windows:
 
-- name: zenoh
+- name: zenoh-rviz
   panes:
+  - cowsay -f tux Connected to: $ROBOT_IP
   - zenoh-bridge-ros2dds -e tcp/$ROBOT_IP:7447
-
-- name: rviz
-  panes:
   - rviz2 --stylesheet $HOME/ws/configs/rviz-dark.qss
 
 - name: teleop
   panes:
-  - ros2 run joy joy_node
-  - ros2 run teleop_twist_joy teleop_node
+  # - ros2 run joy joy_node
+  # - ros2 run teleop_twist_joy teleop_node
+  - echo "joy_node"
