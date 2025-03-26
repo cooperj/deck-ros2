@@ -57,6 +57,7 @@ RUN usermod -a -G dialout $USERNAME &&\
     usermod -a -G plugdev $USERNAME &&\
     usermod -a -G staff $USERNAME &&\
     usermod -a -G sudo $USERNAME &&\
+    usermod -a -G input $USERNAME &&\
     usermod -a -G vglusers $USERNAME
 
 # The vendor_base stage sets up the base image and includes additional Dockerfiles
@@ -126,37 +127,25 @@ RUN rosdep install --from-paths /tmp/src --ignore-src -r -y && rm -rf /tmp/src &
 FROM depinstaller AS depbuilder
 COPY .docker/*.repos* .docker/*.sh /tmp/.docker/
 
-RUN mkdir -p /opt/ros/lcas/src && \
-    cd /opt/ros/lcas/src && \
-    for r in /tmp/.docker/*.repos; do vcs import < $r ; done
+
+# install src dependencies
+RUN mkdir -p /opt/ros/coops/src
+COPY ./src /opt/ros/coops/src
 
 RUN . /opt/ros/humble/setup.sh && \
     apt update && \
     rosdep --rosdistro=${ROS_DISTRO} update && \
-    cd /opt/ros/lcas/src && \
+    cd /opt/ros/coops/src && \
     vcs pull && \
     rosdep install --from-paths . -i -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# now also copy in all sources and build and install them
-FROM depbuilder AS compiled
-
-RUN . /opt/ros/lcas/install/setup.sh && \
-    apt update && \
-    rosdep --rosdistro=${ROS_DISTRO} update && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-    
-RUN cd /opt/ros/lcas && colcon build && \
-    rm -rf /opt/ros/lcas/src/ /opt/ros/lcas/build/ /opt/ros/lcas/log/
-
-# install src dependencies under coops folder
-RUN mkdir -p /opt/ros/coops
-COPY ./src /opt/ros/coops/src
 RUN cd /opt/ros/coops; colcon build && \
     rm -rf /opt/ros/coops/src/ /opt/ros/coops/build/ /opt/ros/coops/log/
 
+# now also copy in all sources and build and install them
+FROM depbuilder AS compiled
 
 # Switch to the ros user and then configure the environment
 USER ros
@@ -174,7 +163,6 @@ COPY ./.docker/tmux.conf /home/ros/.tmux.conf
 RUN echo "alias cls=clear" >> ~/.bashrc
 RUN echo "alias spheres=/opt/VirtualGL/bin/glxspheres64" >> ~/.bashrc
 RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
-RUN echo "source /opt/ros/lcas/install/setup.bash" >> ~/.bashrc
 RUN echo "source /opt/ros/coops/install/setup.bash" >> ~/.bashrc
 
 WORKDIR /home/ros/ws
