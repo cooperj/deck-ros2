@@ -12,6 +12,8 @@ setup(
     data_files=[
         ('share/ament_index/resource_index/packages', [f'resource/{pkg}']),
         (f'share/{pkg}', ['package.xml']),
+        (f'share/{pkg}/config', glob('config/*.yaml')),  # Copy YAML config files
+        (f'share/{pkg}/launch', glob('launch/*.py')),    # Copy Python launch files
     ],
     install_requires=['setuptools'],
     zip_safe=True,

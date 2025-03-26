@@ -155,6 +155,9 @@ RUN . /opt/ros/lcas/install/setup.sh && \
 RUN cd /opt/ros/lcas && colcon build && \
     rm -rf /opt/ros/lcas/src/ /opt/ros/lcas/build/ /opt/ros/lcas/log/
 
+# Own all the files in workspace
+RUN chown -R ros:ros /home/ros/ws
+
 # Switch to the ros user and then configure the environment
 USER ros
 
